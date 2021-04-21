@@ -1,0 +1,103 @@
+- var link = 'firebase-auth-google-fb'
+- var title = 'Firebase Authentication 第三方登入 - GitHub'
+- var description = 'Firebase Authentication 第三方登入 - GitHub'
+
+<!DOCTYPE html>
+html(lang="zh-TW")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title #{title} - Augustus - Let's Write
+
+    link(rel="canonical", href=`https://letswrite.tw/${link}/`)
+    meta(property="og:url", content=`https://letswritetw.github.io/letswrite-${link}/`)
+
+    meta(property="fb:app_id", content="911000986339138")
+    meta(property="og:type", content="website")
+
+    meta(property="og:site_name", content="Let's Write")
+    meta(property="og:title", content=`${title} - Augustus - Let's Write`)
+    meta(itemprop="name", content=`${title} - Augustus - Let's Write`)
+
+    meta(name="description", content=description)
+    meta(property="og:description", content=description)
+    meta(itemprop="description", content=description)
+
+    meta(itemprop="image", content=`https://letswritetw.github.io/letswrite-${link}/fb.jpg`)
+    meta(property="og:image", content=`https://letswritetw.github.io/letswrite-${link}/fb.jpg`)
+    meta(property="og:image:width", content="1200")
+    meta(property="og:image:height", content="630")
+    meta(property="og:image:alt", content=title)
+
+    link(rel="shortcut icon", href="https://letswritetw.github.io/letswritetw/dist/img/logo_512.png")
+
+    //- css
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css")
+    link(rel="stylesheet", href="dist/style.min.css")
+
+    // Google Tag Manager
+    script.
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-PGQ9WQT');
+  body
+
+    // Google Tag Manager (noscript)
+    noscript
+      iframe(src="https://www.googletagmanager.com/ns.html?id=GTM-PGQ9WQT", height="0", width="0", style="display:none;visibility:hidden")
+    
+    #app.container
+
+      h1.text-center Firebase 第三方登入 - GitHub
+      hr
+      p.text-center 筆記文：
+        a(href="https://www.letswrite.tw/firebase-auth-github/", target="_blank") Let's Write
+
+      h2 GitHub
+      h3 選擇登入方式
+      div
+        input#g-popup(type="radio", name="githubType", value="popup", checked)
+        label(for="g-popup") Popup
+      div
+        input#g-redirect(type="radio", name="githubType", value="redirect")
+        label(for="g-redirect") Redirect
+      h3 點擊登入
+      button#github(type="button") GitHub 登入
+
+      pre
+        code#githubCode 登入完後的資料會出現在這
+      pre
+        code#githubError 有錯誤的話會出現在這
+
+    hr
+
+    section#out.d-none
+
+      h2 登出 / 刪除
+      button#signOut(type="button") 登出
+      button#deleteUser(type="button") 刪除我的帳號
+
+      pre
+        code#userError 登出、刪除有錯誤的話會出現在這
+
+      hr
+
+    script(src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js")
+    script(src="https://www.gstatic.com/firebasejs/8.2.4/firebase-auth.js")
+    script.
+      var firebaseConfig = {
+        apiKey: "AIzaSyCFpMDt4vtV96zycNpJTxo73XvA4q9MIZQ",
+        authDomain: "letswrite-helpful-btn.firebaseapp.com",
+        databaseURL: "https://letswrite-helpful-btn.firebaseio.com",
+        projectId: "letswrite-helpful-btn",
+        storageBucket: "letswrite-helpful-btn.appspot.com",
+        messagingSenderId: "498690047881",
+        appId: "1:498690047881:web:dcb559143db6f145e26b58",
+        measurementId: "G-9YZ3G343K3"
+      };
+      firebase.initializeApp(firebaseConfig);
+
+    script(src="dist/main.min.js")
