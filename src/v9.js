@@ -1,5 +1,15 @@
+import {
+  getAuth,
+  signInWithPopup, signInWithRedirect,
+  getRedirectResult,
+  signOut, deleteUser,
+  GithubAuthProvider
+} from "firebase/auth";
+
+const auth = getAuth();
+
 // GitHub
-const providerGithub = new firebase.auth.GithubAuthProvider();
+const providerGithub = new GithubAuthProvider();
 const github = document.getElementById('github');
 const githubCode = document.getElementById('githubCode');
 const githubError = document.getElementById('githubError');
@@ -13,28 +23,28 @@ function openOut() {
 }
 
 // 登出
-function signOut() {
+function triggerSignOut() {
   const signOutBtn = document.getElementById('signOut');
   signOutBtn.addEventListener('click', () => {
-    firebase.auth().signOut().then(() => {
+    signOut(auth).then(() => {
       window.alert('登出成功，將重新整理一次頁面！');
       window.location.reload();
     }).catch((error) => {
       document.getElementById('userError').innerHTML = JSON.stringify(error);
-    });    
+    });  
   })
 }
 
 // 刪除帳號
-function deleteUser() {
-  const user = firebase.auth().currentUser;
+function triggerDeleteUser() {
+  const user = auth.currentUser;
   if(user !== null) {
     const deleteBtn = document.getElementById('deleteUser');
     deleteBtn.addEventListener('click', () => {
-      user.delete().then(function() {
+      deleteUser(user).then(() => {
         window.alert('刪除成功，將重新整理一次頁面！');
         window.location.reload();
-      }).catch(function(error) {
+      }).catch((error) => {
         document.getElementById('userError').innerHTML = JSON.stringify(error);
       });
     })
@@ -59,52 +69,51 @@ github.addEventListener('click', () => {
 
   // popup 的方式
   if(type === 'popup') {
-    firebase.auth()
-      .signInWithPopup(providerGithub)
+    signInWithPopup(auth, providerGithub)
       .then((result) => {
-        let credential = result.credential;
-        let token = credential.accessToken;
-        let user = result.user;
-        console.log("🚀 ~ file: main.js ~ line 70 ~ .then ~ user", user)
+        const credential = GithubAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+        console.log("🚀 ~ file: v9.js ~ line 70 ~ .then ~ user", user)
         githubCode.innerHTML = JSON.stringify(user);
         openOut();
-        signOut();
-        deleteUser();
+        triggerSignOut();
+        triggerDeleteUser();
       }).catch((error) => {
-        let errorCode = error.code;
-        let errorMessage = error.message;
-        let email = error.email;
-        let credential = error.credential;
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.email;
+        const credential = GithubAuthProvider.credentialFromError(error);
         githubError.innerHTML = JSON.stringify(error);
       });
   }
   // redirect 的方式
   else if(type === 'redirect') {
-    firebase.auth().signInWithRedirect(providerGithub);
+    signInWithRedirect(auth, providerGithub);
   }
 });
 
 // redirect 回來時抓資料
 document.addEventListener('DOMContentLoaded', () => {
-  firebase.auth()
-    .getRedirectResult()
+  getRedirectResult(auth)
     .then((result) => {
-      if(result.credential) {
-        let credential = result.credential;
-        let token = credential.accessToken;
+      const credential = GithubAuthProvider.credentialFromResult(result);
+      if(credential) {
+        const token = credential.accessToken;
       }
-      let user = result.user;
+      const user = result.user;
       if(user) {
         githubCode.innerHTML = JSON.stringify(user);
         openOut();
-        signOut();
-        deleteUser();
+        triggerSignOut();
+        triggerDeleteUser();
       }
     }).catch((error) => {
-      let errorCode = error.code;
-      let errorMessage = error.message;
-      let email = error.email;
-      let credential = error.credential;
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const email = error.email;
+      const credential = GithubAuthProvider.credentialFromError(error);
       githubError.innerHTML = JSON.stringify(error);
     });
 });
+
